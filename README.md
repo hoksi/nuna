@@ -1,2 +1,2 @@
-# nuna
-nuna framework
+# Nuna
+Nuna Framework
