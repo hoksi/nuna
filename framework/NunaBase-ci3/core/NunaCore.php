@@ -346,6 +346,9 @@ if ( ! is_php('5.4'))
 	class Nuna extends CI_Controller {
 	    public $router;
 	    public $class_name;
+	    
+	    protected $runMethod;
+	    protected $runClass;
 	    protected $runMode;
 	    protected $profilerMode;
 	
@@ -358,19 +361,19 @@ if ( ! is_php('5.4'))
 	        
 	        $this->router->set_class_name($this->class_name);
 	        
-	        $class = $this->router->fetch_class();
-	        $method = $this->router->fetch_method();
-	        
-	        if(method_exists($this, '_remap')) {
-	            $this->_remap($method, $this->router->fetch_params());
-	        } elseif(method_exists($this, $method)) {
-	            call_user_func_array(array($this, $method), $this->router->fetch_params());
-	        } else if($this->class_name != 'Nuna') {
-	        	show_404("{$class}/{$method}");
-	        }
+	        $this->runClass = $this->router->fetch_class();
+	        $this->runMethod = $this->router->fetch_method();
 	    }
 	    
 	    public function run($profiler = false) {
+	        if(method_exists($this, '_remap')) {
+	            $this->_remap($this->runMethod, $this->router->fetch_params());
+	        } elseif(method_exists($this, $this->runMethod)) {
+	            call_user_func_array(array($this, $this->runMethod), $this->router->fetch_params());
+	        } else if($this->class_name != 'Nuna') {
+	        	show_404("{$this->runClass}/{$this->runMethod}");
+	        }
+
 	        if($profiler) {
 	            $this->output->enable_profiler();
 	        }
@@ -387,7 +390,7 @@ if ( ! is_php('5.4'))
 	        if (class_exists('CI_DB') AND isset($this->db)) {
 	            $this->db->close();
 	        }
-	        
+
 	        if($this->runMode) {
 	            $this->run($this->profilerMode);
 	        }

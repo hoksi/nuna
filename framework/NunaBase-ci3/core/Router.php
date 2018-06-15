@@ -11,9 +11,15 @@ class CI_Router {
     protected $params;
     
     function __construct() {
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = is_cli() ? implode('/', $_SERVER['argv']) : parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $basename = basename($_SERVER['SCRIPT_NAME']);
+
+        if(strpos($path, $basename) === false) {
+            $path = (rtrim($path, '/')) . '/' . $basename;
+        }
+
         $params = explode('/', trim(str_replace($_SERVER['SCRIPT_NAME'], '', $path), '/'));
-        $this->lass_method = array_shift($params);
+        $this->method = array_shift($params);
         $this->method = $this->method ? $this->method : 'index';
         $this->params = $params;
     }
