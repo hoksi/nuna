@@ -336,6 +336,13 @@ if ( ! is_php('5.4'))
 
 /*
  * ------------------------------------------------------
+ *  Load the Template class
+ * ------------------------------------------------------
+ */
+	$LANG =& load_class('Tpl', 'core');
+
+/*
+ * ------------------------------------------------------
  *  Load the app controller and local controller
  * ------------------------------------------------------
  *
@@ -357,6 +364,21 @@ if ( ! is_php('5.4'))
 	function &get_instance()
 	{
 		return Nuna::get_instance();
+	}
+	
+	function getNuna()
+	{
+		static $nuna = null;
+		
+		if(get_instance() === null) {
+			if($nuna === null) {
+				$nuna = new Nuna();
+			}
+			
+			return $nuna;
+		}
+		
+		return get_instance();
 	}
 
 	// Set a mark point for benchmarking

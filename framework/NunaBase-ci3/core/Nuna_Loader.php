@@ -10,8 +10,6 @@ class Nuna_Loader extends CI_Loader {
     }
     
     public function tpl($tpl, $vars = array(), $return = FALSE) {
-        $this->Nuna->load->library('lib_tpl', false, 'tpl');
-        
         $tplParse = explode('.', $tpl);
         $tplId = $tplParse[0];
         
@@ -32,20 +30,14 @@ class Nuna_Loader extends CI_Loader {
     }
     
     public function import($resource, $params = false, $opt = false) {
-        $this->Nuna->load->library('lib_tpl', false, 'tpl');
-
-        /**
-         * lib : lib.auth
-         */
-         
-         $res_parse = explode('.', $resource);
-         if(!empty($res_parse) && ($res_parse[0] == 'db' || count($res_parse) >= 2)) {
+        $res_parse = explode('.', $resource);
+        if(!empty($res_parse) && ($res_parse[0] == 'db' || count($res_parse) >= 2)) {
             $res_type = array_shift($res_parse);
-
+        
             return $this->getResource($res_type, $res_parse, $params, $opt);
-         } else {
+        } else {
             show_error('Resource is Empty!');
-         }
+        }
     }
     
     protected function getResource($type, $res_params, $params, $opt) {

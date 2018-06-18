@@ -2,7 +2,7 @@
 
 require_once THIRDPARTYPATH . 'Template_.2.2.8/Template_.class.php';
 
-class Lib_tpl extends Template_ {
+class CI_Tpl extends Template_ {
     protected $orgTemplateDir = false;
 
     public function __construct($config = array()) {

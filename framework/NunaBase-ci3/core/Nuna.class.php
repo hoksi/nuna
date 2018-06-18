@@ -31,8 +31,8 @@ class Nuna extends CI_Controller {
             $this->_remap($this->runMethod, $this->router->fetch_params());
         } elseif(method_exists($this, $this->runMethod)) {
             call_user_func_array(array($this, $this->runMethod), $this->router->fetch_params());
-        } else if($this->class_name != 'Nuna') {
-        	show_404("{$this->runClass}/{$this->runMethod}");
+        } elseif($this->class_name != 'Nuna') {
+        	show_error("The page you requested was not found. ({$this->runClass}/{$this->runMethod})");
         }
 
         if($profiler) {

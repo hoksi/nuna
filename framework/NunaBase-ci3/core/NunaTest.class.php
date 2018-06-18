@@ -395,7 +395,9 @@ class NunaTest extends Nuna
 		$data = $data === null ? '(php null)' : $data;
 		$data = $data === true ? '(bool true)' : $data;
 		
-		$this->message .= (print_r($data, true) . PHP_EOL);
+		$message = (print_r($data, true) . PHP_EOL);
+		
+		$this->message .= is_cli() ? $message : nl2br($message);
 	}
 
 }
