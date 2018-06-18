@@ -39,7 +39,7 @@ class Nuna_Loader extends CI_Loader {
          */
          
          $res_parse = explode('.', $resource);
-         if(!empty($res_parse) && count($res_parse) >= 2) {
+         if(!empty($res_parse) && ($res_parse[0] == 'db' || count($res_parse) >= 2)) {
             $res_type = array_shift($res_parse);
 
             return $this->getResource($res_type, $res_parse, $params, $opt);
@@ -56,6 +56,7 @@ class Nuna_Loader extends CI_Loader {
             case 'model': return $this->getModel($res_params, $params, $opt); break;
             case 'ci': return $this->getCiLib($res_params, $params, $opt); break;
             case 'lib': return $this->getLib($res_params, $params, $opt); break;
+            case 'db': return $this->getDb(implode('', $res_params), $params); break;
             default: return false; break;
         }
     }
@@ -123,6 +124,10 @@ class Nuna_Loader extends CI_Loader {
         $this->library($nunaLibrary, $params, $object_name);
         
         return isset($this->Nuna->{$nunaLibrary}) ? $this->Nuna->{$nunaLibrary} : false;
+    }
+    
+    protected function getDb($dbConfig, $custumConfig = array()) {
+        return $this->Nuna->load->database($dbConfig, true);
     }
 
 }
